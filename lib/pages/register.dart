@@ -42,8 +42,8 @@ class _RegisterPageState extends State<RegisterPage> {
     // catch any error:
     catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error: Failed to register! $e")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error: Failed to register! $e")));
       }
     }
   }
@@ -52,9 +52,9 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[300],
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Login Page"),
+        title: const Center(child: const Text("Login Page")),
       ),
       body: SafeArea(
         child: Center(
@@ -94,7 +94,8 @@ class _RegisterPageState extends State<RegisterPage> {
               // Password textfield:
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: "Masukkan Password"),
+                decoration:
+                    const InputDecoration(labelText: "Masukkan Password"),
                 obscureText: true,
               ),
 
@@ -103,7 +104,8 @@ class _RegisterPageState extends State<RegisterPage> {
               // Confirm Password:
               TextField(
                 controller: _confirmPasswordController,
-                decoration: const InputDecoration(labelText: "Confirm Passsword"),
+                decoration:
+                    const InputDecoration(labelText: "Confirm Passsword"),
                 obscureText: true, // password is hidden
               ),
 
@@ -116,25 +118,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               const SizedBox(height: 50),
-
-              // Dont have account? register now
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Dont have account?',
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'Register now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ),
