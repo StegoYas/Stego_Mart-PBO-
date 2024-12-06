@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stego_mart/pages/login.dart';
-import 'package:stego_mart/pages/profile.dart';
+import 'package:stego_mart/screens/profile.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthGate extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stego_mart/components/component.dart';
-import 'package:stego_mart/pages/profile.dart';
+import 'package:stego_mart/screens/profile.dart';
 import 'package:stego_mart/screens/add.dart';
 
 class TrxScreen extends StatelessWidget {
@@ -12,8 +12,15 @@ class TrxScreen extends StatelessWidget {
     final bool isSmallScreen = screenSize.width < 600;
 
     return Scaffold(
-      appBar: Components.loadAppbar(Icons.arrow_back_ios_sharp,
-        () => Navigator.pop(context), Icons.person, () => ProfilePage()),
+      appBar: Components.loadAppbar(
+        Icons.arrow_back_ios_sharp,
+        () => Navigator.pop(context),
+        Icons.person,
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage()),
+        ),
+      ),
       body: Container(
         color: Colors.white,
         child: Column(
