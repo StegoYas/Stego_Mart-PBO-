@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stego_mart/auth/auth_service.dart';
 import 'package:stego_mart/components/component.dart';
+import 'package:stego_mart/screens/home.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -26,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: Components.loadAppbar(Icons.arrow_back_ios_sharp,
-        () => Navigator.pop(context), Icons.person, () => ProfilePage()),
+          () => HomeScreen(), Icons.person, () => ProfilePage()),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -41,10 +42,14 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 10),
             itemProfile('Phone', '+62 03107085816', CupertinoIcons.phone),
             const SizedBox(height: 10),
-            itemProfile('Address', 'Norwegia, Kota New Asgard', CupertinoIcons.location),
+            itemProfile('Address', 'Norwegia, Kota New Asgard',
+                CupertinoIcons.location),
             const SizedBox(height: 10),
-            itemProfile('Email', currentEmail.toString(), CupertinoIcons.mail), // Use currentEmail here
-            const SizedBox(height: 20,),
+            itemProfile('Email', currentEmail.toString(),
+                CupertinoIcons.mail), // Use currentEmail here
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -52,8 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(15),
                   ),
-                  child: const Text('Logout Account')
-              ),
+                  child: const Text('Logout Account')),
             )
           ],
         ),
@@ -71,10 +75,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 offset: Offset(0, 5),
                 color: Colors.deepOrange.withOpacity(.2),
                 spreadRadius: 2,
-                blurRadius: 10
-            )
-          ]
-      ),
+                blurRadius: 10)
+          ]),
       child: ListTile(
         title: Text(title),
         subtitle: Text(subtitle),
@@ -83,6 +85,5 @@ class _ProfilePageState extends State<ProfilePage> {
         tileColor: Colors.white,
       ),
     );
-
   }
 }
