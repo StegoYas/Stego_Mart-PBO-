@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stego_mart/auth/auth_gate.dart';
 import 'package:stego_mart/auth/auth_service.dart';
 import 'package:stego_mart/components/component.dart';
 import 'package:stego_mart/screens/home.dart';
@@ -27,7 +28,13 @@ class _ProfilePageState extends State<ProfilePage> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () {
+                // Menggunakan pushReplacement agar kembali ke halaman HomeScreen
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => AuthGate()),
+                );
+              },
               child: const Text('Logout'),
             ),
           ],
