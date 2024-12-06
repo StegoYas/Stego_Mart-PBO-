@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:stego_mart/auth/auth_gate.dart';
+import 'package:stego_mart/pages/login.dart';
 import 'package:stego_mart/screens/home.dart';
-import 'dart:async'; // Import for Future.delayed
-import 'package:stego_mart/screens/home.dart';
-
+import 'dart:async'; 
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -19,12 +19,12 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                HomeScreen()), // Replace with your actual home page widget
+                const AuthGate()), // Replace with your actual home page widget
       );
     });
   }
 
-
+  // UI nya:
   @override
   Widget build(BuildContext context) {
     return Scaffold(

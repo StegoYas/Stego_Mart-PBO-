@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stego_mart/components/component.dart';
+import 'package:stego_mart/pages/profile.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -10,7 +11,7 @@ class CartScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: Components.loadAppbar(Icons.arrow_back_ios_sharp,
-          () => Navigator.pop(context), Icons.person, () => {}),
+          () => Navigator.pop(context), Icons.person, () => ProfilePage()),
       body: Container(
         color: Colors.white,
         padding: EdgeInsets.symmetric(
@@ -20,9 +21,17 @@ class CartScreen extends StatelessWidget {
           productItems: [
             ["assets/images/Burger.jpg", "Burger Medium", "Rp. 45.000,00"],
             ["assets/images/Minuman.jpg", "Coca Cola", "Rp. 45.000,00"],
-            ["assets/images/Headsetgaming.jpg", "Headset Gaming", "Rp. 45.000,00"],
+            [
+              "assets/images/Headsetgaming.jpg",
+              "Headset Gaming",
+              "Rp. 45.000,00"
+            ],
             ["assets/images/Keyboard.jpg", "Keyboard Gaming", "Rp. 45.000,00"],
-            ["assets/images/jaketbaseball.jpg", "Jaket Baseball", "Rp. 45.000,00"],
+            [
+              "assets/images/jaketbaseball.jpg",
+              "Jaket Baseball",
+              "Rp. 45.000,00"
+            ],
           ],
           isSmallScreen: isSmallScreen,
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stego_mart/components/component.dart';
+import 'package:stego_mart/pages/profile.dart';
 import 'package:stego_mart/screens/add.dart';
 import 'package:stego_mart/screens/cart.dart';
 import 'package:stego_mart/screens/trx.dart';
@@ -35,12 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: Components.loadAppbar(
-        Icons.menu,
-        () {},
-        Icons.person,
-        () {},
-      ),
+      appBar: Components.loadAppbar(Icons.arrow_back_ios_sharp,
+        () => Navigator.pop(context), Icons.person, () => ProfilePage()),
       body: Container(
         margin: const EdgeInsets.only(left: 40, right: 40, bottom: 40, top: 15),
         color: Colors.white,
