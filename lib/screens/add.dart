@@ -1,6 +1,7 @@
-import 'dart:io';
+import 'dart:typed_data'; // Untuk Uint8List
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // Untuk Supabase
 import 'package:google_fonts/google_fonts.dart';
 
 class AddScreen extends StatefulWidget {
@@ -10,8 +11,11 @@ class AddScreen extends StatefulWidget {
 
 class _AddScreenState extends State<AddScreen> {
   String? selectedCategory;
-  File? _selectedImage;
+  Uint8List? _selectedImage; // Mengubah tipe ke Uint8List
   final ImagePicker _picker = ImagePicker();
+
+  // Supabase Client
+  final SupabaseClient _supabaseClient = Supabase.instance.client;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,14 @@ class _AddScreenState extends State<AddScreen> {
                 height: 50,
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _uploadImageToSupabase(
+                      nama: "Nama Produk", // Ganti dengan value dari input nama
+                      harga: 15000.0, // Ganti dengan value dari input harga
+                      kategori: selectedCategory ??
+                          "Makanan", // Kategori yang dipilih
+                    );
+                  },
                   child: Text(
                     "Submit",
                     style: GoogleFonts.inter(
@@ -176,11 +187,11 @@ class _AddScreenState extends State<AddScreen> {
           ),
           MaterialButton(
             padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-            color: Colors.white, // Removed blue color
+            color: Colors.white,
             child: Text(
               "Please select an image",
               style: TextStyle(
-                color: Colors.black, // Text color changed to blue
+                color: Colors.black,
                 fontSize: 14,
               ),
             ),
@@ -199,9 +210,9 @@ class _AddScreenState extends State<AddScreen> {
                 child: _selectedImage != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.file(
-                          _selectedImage!,
-                          fit: BoxFit.contain,
+                        child: Image.memory(
+                          _selectedImage!, // Menampilkan gambar dari Uint8List
+                          fit: BoxFit.cover,
                         ),
                       )
                     : Center(child: Text("No image")),
@@ -216,9 +227,68 @@ class _AddScreenState extends State<AddScreen> {
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes(); // Baca sebagai Uint8List
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _selectedImage = bytes;
       });
+    }
+  }
+
+  Future<void> _uploadImageToSupabase({
+    required String nama,
+    required double harga,
+    required String kategori,
+  }) async {
+    if (_selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select an image first")),
+      );
+      return;
+    }
+
+    try {
+      final fileName = 'product_${DateTime.now().millisecondsSinceEpoch}.png';
+
+      // Upload gambar ke Supabase Storage
+      final storageResponse = await _supabaseClient.storage
+          .from('stego_mart') // Ganti dengan nama bucket
+          .uploadBinary(fileName, _selectedImage!);
+
+      if (storageResponse.isEmpty) {
+        throw Exception("Storage Error: File upload failed.");
+      }
+
+      // Mendapatkan URL publik gambar
+      final imageUrl =
+          _supabaseClient.storage.from('stego_mart').getPublicUrl(fileName);
+
+      // Simpan data produk ke tabel 'food'
+      final dbResponse = await _supabaseClient
+          .from('food') // Nama tabel
+          .insert({
+        'nama': nama, // Nama produk dari input pengguna
+        'harga': harga, // Harga produk dari input pengguna
+        'kategori': kategori, // Kategori dari input dropdown
+        'gambar': imageUrl, // URL gambar yang diunggah
+      });
+
+      if (dbResponse.error != null) {
+        throw Exception("Database Error: ${dbResponse.error!.message}");
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Image uploaded and data saved successfully")),
+      );
+
+      // Reset form dan state setelah berhasil
+      setState(() {
+        _selectedImage = null;
+        selectedCategory = null;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
     }
   }
 }
