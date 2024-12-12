@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stego_mart/components/component.dart';
-import 'package:stego_mart/screens/profile.dart';
-import 'package:stego_mart/screens/add.dart';
+// import 'package:stego_mart/screens/add.dart';
 import 'package:stego_mart/screens/cart.dart';
+import 'package:stego_mart/screens/profile.dart';
 import 'package:stego_mart/screens/trx.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.only(left: 40, right: 40, bottom: 40, top: 15),
+        margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 15),
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         backgroundColor: Colors.white,
-        unselectedItemColor: Colors.black54,
+        unselectedItemColor: Colors.black,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined, size: 28),
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         loadCategoryItem(
-            color: Colors.purple,
+            color: Color.fromARGB(255, 170, 0, 238),
             image: AssetImage("assets/images/food.jpg"),
             label: "All"),
         loadCategoryItem(
@@ -98,6 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
             image: AssetImage("assets/images/Minuman.jpg"),
             label: "Drinks"),
+        loadCategoryItem(
+            color: Colors.white,
+            image: AssetImage("assets/images/Fashion.jpg"),
+            label: "Fashion"),
+        loadCategoryItem(
+            color: Colors.white,
+            image: AssetImage("assets/images/Electronic.png"),
+            label: "Electronics"),
       ],
     );
   }
@@ -112,10 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black12,
+                color: Color.fromARGB(102, 0, 0, 0),
                 spreadRadius: 3,
                 blurRadius: 5,
               ),
@@ -123,13 +131,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           padding: EdgeInsets.all(10),
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
             child: InkWell(
               onTap: () => {},
               child: Image(
                 image: image,
-                height: 50,
-                width: 50,
+                height: 40,
+                width: 40,
                 fit: BoxFit.cover,
               ),
             ),
@@ -147,44 +155,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget loadProductsGrid() {
     List<List> foodItems = [
-      ["Burger King", "55.000", "assets/images/Burger.jpg"],
-      ["Coca Cola", "20.000", "assets/images/Minuman.jpg"],
-      ["Pizza Small", "65.000", "assets/images/posterpizza1.jpg"],
-      ["Pizza Medium", "85.000", "assets/images/posterpizza2.jpg"],
-      ["Seragam Sekolah", "250.000", "assets/images/Seragamseifukujepang.jpg"]
+      ["Burger King", "Rp 50.000", "assets/images/Burger.jpg"],
+      ["Coca Cola", "Rp 70.000", "assets/images/Minuman.jpg"],
+      ["Keyboard Gaming", "Rp 350.000", "assets/images/Keyboard.jpg"],
+      ["Headset Gaming", "Rp 400.000", "assets/images/Headsetgaming.jpg"],
+      ["Pizza Hut Medium", "Rp 95.000", "assets/images/posterpizza1.jpg"],
+      [
+        "Seragam Sekolah",
+        "Rp 200.000",
+        "assets/images/Seragamseifukujepang.jpg"
+      ],
+      ["Pizza Hut Small", "Rp 65.000", "assets/images/posterpizza2.jpg"]
     ];
 
     return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 20),
-            child: Text(
-              "All Food",
-              textAlign: TextAlign.left,
-              style: GoogleFonts.poppins(
-                textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 0.75,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              children: List.generate(foodItems.length, (index) {
-                return loadProductCard(
-                  name: foodItems[index][0],
-                  price: foodItems[index][1],
-                  image: foodItems[index][2],
-                );
-              }),
-            ),
-          ),
-        ],
+      child: GridView.builder(
+        padding: const EdgeInsets.all(8), // Memberikan padding untuk grid
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 16, // Jarak antar baris
+          crossAxisSpacing: 16, // Jarak antar kolom
+          childAspectRatio: 0.75,
+        ),
+        itemCount: foodItems.length,
+        itemBuilder: (context, index) {
+          return loadProductCard(
+            name: foodItems[index][0],
+            price: foodItems[index][1],
+            image: foodItems[index][2],
+          );
+        },
       ),
     );
   }
@@ -195,12 +195,16 @@ class _HomeScreenState extends State<HomeScreen> {
     required String image,
   }) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(30)),
         boxShadow: [
-          BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 5),
+          BoxShadow(
+            color: const Color.fromARGB(148, 0, 0, 0),
+            spreadRadius: 2,
+            blurRadius: 5,
+          ),
         ],
       ),
       child: Column(
@@ -209,19 +213,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: AspectRatio(
-              aspectRatio: 1.5,
+              aspectRatio: 1,
               child: Image(
                 image: AssetImage(image),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 10),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
               name,
-              style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+              overflow: TextOverflow.ellipsis, // Membatasi teks panjang
             ),
           ),
           Row(
@@ -229,8 +237,10 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text(
                 price,
-                textAlign: TextAlign.left,
-                style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
               ),
               InkWell(
                 onTap: () => {}, // Add your onTap logic here
@@ -240,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                     color: Colors.orange,
                   ),
-                  child: Icon(Icons.add),
+                  child: Icon(Icons.add, size: 16),
                 ),
               ),
             ],

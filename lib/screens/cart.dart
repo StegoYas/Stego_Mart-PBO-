@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stego_mart/components/component.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stego_mart/screens/profile.dart';
+// import 'package:google_fonts/google_fonts.dart';
+// import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -26,19 +28,15 @@ class CartScreen extends StatelessWidget {
         ),
         child: loadProductsList(
           productItems: [
-            ["assets/images/Burger.jpg", "Burger Medium", "Rp. 45.000,00"],
+            ["assets/images/Burger.jpg", "Burger King", "Rp. 45.000,00"],
             ["assets/images/Minuman.jpg", "Coca Cola", "Rp. 45.000,00"],
-            [
-              "assets/images/Headsetgaming.jpg",
-              "Headset Gaming",
-              "Rp. 45.000,00"
-            ],
             ["assets/images/Keyboard.jpg", "Keyboard Gaming", "Rp. 45.000,00"],
             [
               "assets/images/jaketbaseball.jpg",
               "Jaket Baseball",
               "Rp. 45.000,00"
             ],
+            ["assets/images/posterpizza2.jpg", "Pizza Hut", "Rp. 45.000,00"],
           ],
           isSmallScreen: isSmallScreen,
         ),
@@ -49,7 +47,7 @@ class CartScreen extends StatelessWidget {
 
   Widget loadProductsList({
     List productItems = const [
-      ["assets/images/Burger.jpg", "Burger King Medium", "Rp. 50.000,00"],
+      ["assets/images/Burger.jpg", "Burger King", "Rp. 50.000,00"],
       ["assets/images/Minuman.jpg", "Coca Cola", "Rp. 10.000,00"],
     ],
     required bool isSmallScreen,
@@ -109,7 +107,7 @@ class CartScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     fontSize: isSmallScreen ? 10 : 12,
                     textStyle: TextStyle(
-                      color: Color.fromARGB(255, 45, 45, 45),
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -207,7 +205,7 @@ class CartScreen extends StatelessWidget {
                   child: Container(
                     margin: EdgeInsets.only(bottom: 5),
                     child: Text(
-                      "Ringkasan Pembelian",
+                      "Ringkasan Belanja",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -242,7 +240,7 @@ class CartScreen extends StatelessWidget {
                             textStyle: TextStyle(
                               fontWeight: FontWeight.w300,
                               fontSize: isSmallScreen ? 14 : 16,
-                              color: Color.fromARGB(255, 44, 44, 44),
+                              color: Color(0xFF555555),
                             ),
                           ),
                         ),
@@ -256,7 +254,7 @@ class CartScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Total Pembelian",
+                        "Total Belanja",
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
                             fontWeight: FontWeight.w300,
@@ -324,8 +322,8 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
               style: TextButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 255, 149, 0),
-                foregroundColor: const Color.fromARGB(255, 13, 16, 46),
+                backgroundColor: const Color.fromARGB(255, 255, 132, 0),
+                foregroundColor: const Color.fromARGB(255, 16, 20, 53),
               ),
             ),
           ),

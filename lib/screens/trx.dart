@@ -1,15 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stego_mart/components/component.dart';
-import 'package:stego_mart/screens/profile.dart';
 import 'package:stego_mart/screens/add.dart';
+import 'package:stego_mart/screens/profile.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TrxScreen extends StatelessWidget {
+class TrxScreen extends StatefulWidget {
+  @override
+  _TrxScreenState createState() => _TrxScreenState();
+}
+
+class _TrxScreenState extends State<TrxScreen> {
+  final supabase = Supabase.instance.client;
+  late final Stream<List<Map<String, dynamic>>> productStream;
+
+  @override
+  void initState() {
+    super.initState();
+    productStream = fetchProductStream();
+  }
+
+  Stream<List<Map<String, dynamic>>> fetchProductStream() {
+    return supabase
+        .from('food') // Pastikan tabel "food" sesuai dengan database Anda
+        .stream(primaryKey: ['id']).map(
+            (event) => event.map((e) => e as Map<String, dynamic>).toList());
+  }
+
+  Future<void> deleteProduct(int productId) async {
+    try {
+      await supabase.from('food').delete().eq('id', productId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Product deleted successfully')),
+      );
+    } catch (error) {
+      print('Error deleting product: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete product')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     final Size screenSize = MediaQuery.of(context).size;
-    final bool isSmallScreen = screenSize.width < 600;
 
     return Scaffold(
       appBar: Components.loadAppbar(
@@ -21,219 +54,129 @@ class TrxScreen extends StatelessWidget {
           MaterialPageRoute(builder: (context) => ProfilePage()),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            
-            Container(
-              color: Colors.white,
-              margin: EdgeInsets.only(
-                top: screenSize.height * 0.05,
-                left: screenSize.width * 0.05,
+      body: Column(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddScreen()),
               ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddScreen()),
-                  );
-                },
-                child: Container(
-                  height: 40,
-                  width: screenSize.width * 0.25,
-                  constraints: BoxConstraints(
-                    maxWidth: 150,
-                    minWidth: 110,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 98, 0),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.withOpacity(0.3),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add Data +",
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          fontSize: isSmallScreen ? 14 : 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              child: Text("Add Data +"),
             ),
-            SizedBox(height: screenSize.height * 0.02),
-
-           
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: screenSize.width * 0.05,
-                vertical: screenSize.height * 0.02,
-              ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildHeaderText("Foto Produk", isSmallScreen),
-                    SizedBox(width: screenSize.width * 0.05),
-                    _buildHeaderText("Nama Produk", isSmallScreen),
-                    SizedBox(width: screenSize.width * 0.05),
-                    _buildHeaderText("Harga", isSmallScreen),
-                    SizedBox(width: screenSize.width * 0.05),
-                    _buildHeaderText("Aksi", isSmallScreen),
-                  ],
-                ),
-              ),
-            ),
-
-           
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    makeDivider(),
-                    _buildProductItem(
-                      context: context,
-                      img: "assets/images/Burger.jpg",
-                      isSmallScreen: isSmallScreen,
-                    ),
-                    makeDivider(),
-                    _buildProductItem(
-                      context: context,
-                      img: "assets/images/Minuman.jpg",
-                      productName: "Coca Cola",
-                      productPrice: "Rp. 20.000,00",
-                      isSmallScreen: isSmallScreen,
-                    ),
-                    makeDivider(),
-                    _buildProductItem(
-                      context: context,
-                      img: "assets/images/Seragamseifukujepang.jpg",
-                      productName: "Seragam Sekolah",
-                      productPrice: "Rp. 250.000,00",
-                      isSmallScreen: isSmallScreen,
-                    ),
-                    makeDivider(),
-                    _buildProductItem(
-                      context: context,
-                      img: "assets/images/Keyboard.jpg",
-                      productName: "Keyboard Gaming",
-                      productPrice: "Rp. 450.000,00",
-                      isSmallScreen: isSmallScreen,
-                    ),
-                    makeDivider(),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeaderText(String text, bool isSmallScreen) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Text(
-        text,
-        style: GoogleFonts.inter(
-          textStyle: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-            fontSize: isSmallScreen ? 14 : 16,
           ),
-        ),
+          Expanded(
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: productStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  final error = snapshot.error;
+                  return Center(child: Text('Error loading products: $error'));
+                }
+
+                final products = snapshot.data ?? [];
+                if (products.isEmpty) {
+                  return Center(child: Text('No products available'));
+                }
+
+                return ListView.builder(
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return Column(
+                      children: [
+                        makeDivider(),
+                        _buildProductItem(
+                          context: context,
+                          product: product,
+                          screenSize: screenSize,
+                          onDelete: () => deleteProduct(product['id']),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildProductItem({
     required BuildContext context,
-    required String img,
-    String productName = "Burger King Medium",
-    String productPrice = "Rp. 55.000,00",
-    required bool isSmallScreen,
+    required Map<String, dynamic> product,
+    required Size screenSize,
+    required VoidCallback onDelete,
   }) {
-    final Size screenSize = MediaQuery.of(context).size;
-
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: screenSize.width * 0.05,
         vertical: screenSize.height * 0.01,
       ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Product Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image(
-                image: AssetImage(img),
-                height: isSmallScreen ? 80 : 100,
-                width: isSmallScreen ? 80 : 100,
-                fit: BoxFit.cover,
-              ),
+      child: Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween, // Memastikan ikon di sebelah kanan
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Gambar produk
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              product['image_url'] ?? '',
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 100,
+                  width: 100,
+                  color: Colors.grey,
+                  child: Icon(Icons.error),
+                );
+              },
             ),
-            SizedBox(width: screenSize.width * 0.03),
-
-            // Product Name
-            Container(
-              width: screenSize.width * 0.2,
-              constraints: BoxConstraints(
-                minWidth: 100,
-                maxWidth: 200,
-              ),
-              child: Text(
-                productName,
-                style: TextStyle(
-                  fontSize: isSmallScreen ? 14 : 16,
+          ),
+          SizedBox(width: 15),
+          // Informasi produk
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product['name'] ?? 'Unknown Product',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ),
-            SizedBox(width: screenSize.width * 0.03),
-
-            // Product Price
-            Container(
-              width: screenSize.width * 0.15,
-              constraints: BoxConstraints(
-                minWidth: 80,
-                maxWidth: 150,
-              ),
-              child: Text(
-                productPrice,
-                style: TextStyle(
-                  fontSize: isSmallScreen ? 14 : 16,
+                SizedBox(height: 5),
+                Text(
+                  'Rp. ${product['harga']?.toString() ?? '0'}',
+                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                 ),
-              ),
+                SizedBox(height: 5),
+                Text(
+                  'Quantity: ${product['quantity']?.toString() ?? '0'}',
+                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                ),
+              ],
             ),
-            SizedBox(width: screenSize.width * 0.03),
-
-            
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.delete_outlined,
-                color: Colors.redAccent,
-                size: isSmallScreen ? 32 : 40,
-              ),
+          ),
+          // Tombol hapus
+          IconButton(
+            onPressed: onDelete,
+            icon: Icon(
+              Icons.delete_outlined,
+              color: Colors.redAccent,
+              size: 28,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

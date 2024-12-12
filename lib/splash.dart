@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stego_mart/auth/auth_gate.dart';
-import 'package:stego_mart/pages/login.dart';
-import 'package:stego_mart/screens/home.dart';
+// import 'package:stego_mart/pages/login.dart';
+// import 'package:stego_mart/screens/home.dart';
 import 'dart:async'; 
 
 class SplashScreen extends StatefulWidget {

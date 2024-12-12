@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stego_mart/auth/auth_gate.dart';
 import 'package:stego_mart/auth/auth_service.dart';
-import 'package:stego_mart/components/component.dart';
 import 'package:stego_mart/screens/home.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -29,11 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             TextButton(
               onPressed: () {
-                // Menggunakan pushReplacement agar kembali ke halaman HomeScreen
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => AuthGate()),
-                );
+                Navigator.of(context).pop(true);
               },
               child: const Text('Logout'),
             ),
@@ -44,9 +39,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (shouldLogout == true) {
       await authService.signOut();
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => AuthGate()),
+        (route) => false,
       );
     }
   }
@@ -61,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
-            // Menggunakan pushReplacement agar kembali ke halaman HomeScreen
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen()),

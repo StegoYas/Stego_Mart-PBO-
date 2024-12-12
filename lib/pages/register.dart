@@ -54,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Center(child: const Text("Login Page")),
+        title: const Center(child: const Text("Register Page")),
       ),
       body: SafeArea(
         child: Center(
